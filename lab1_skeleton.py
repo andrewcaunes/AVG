@@ -34,23 +34,23 @@ def main(args):
     # pts_homo = #TODO
     
     # # Identify image of the line at infinity on the projective plane
-    # line_0_0 = #TODO # the first horizontal line
-    # line_0_1 = #TODO # the 2nd horizontal line
+    # line_0_0 = #TODO
+    # line_0_1 = #TODO
     # pt_vanishing_0 = #TODO # first vanishing point
     # pt_vanishing_0 /= pt_vanishing_0[-1]  # normalize
     # logging.info('First vanishing point: %s', pt_vanishing_0)
     
-    # # Debug : Plot first horizontal lines and vanishing point
+    # # Debug : Plot first pair of lines and vanishing point
     # plot_lines_and_vanishing_point(img, line_0_0, line_0_1, pt_vanishing_0)
 
-    # line_1_0 = #TODO # the 1st vertical line
-    # line_1_1 = #TODO # the 2nd vertical line
+    # line_1_0 = #TODO
+    # line_1_1 = #TODO
     # pt_vanishing_1 = #TODO # 2nd vanishing point
 
     # pt_vanishing_1 /= pt_vanishing_1[-1]
     # logging.info('Second vanishing point: %s', pt_vanishing_1)
 
-    # # Debug : Plot second vertical lines and vanishing point
+    # # Debug : Plot second pair of lines lines and vanishing point
     # plot_lines_and_vanishing_point(img, line_1_0, line_1_1, pt_vanishing_1)
 
     # # l_inf = #TODO # image of line at inf
