@@ -1,9 +1,8 @@
 """
     Skeleton code for lab 1
-    Usage : python path/to/lab1_skeleton.py --filename path/to/fig1_6c__.jpg
+    Usage : python path/to/lab1_skeleton.py --filename path/to/image
 
 """
-
 
 import numpy as np
 import cv2
