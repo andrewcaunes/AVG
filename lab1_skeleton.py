@@ -14,8 +14,74 @@ import logging
 logging.basicConfig(format='[%(module)s | l.%(lineno)d] %(message)s')
 logging.getLogger().setLevel(logging.INFO)
 
-# args come from the script at the end of the file
-def main(args):
+# Utility functions, you can mostly ignore them
+def euclidean_trans(theta, tx, ty):
+    return np.array([
+        [np.cos(theta), -np.sin(theta), tx],
+        [np.sin(theta), np.cos(theta), ty],
+        [0, 0, 1]
+    ])
+
+def points_that_should_work_if_pointing_does_not_work():
+    return np.array([
+        [ 745.65367965,  646.25324675],
+        [1057.34199134,  464.43506494],
+        [1382.01731602,  641.92424242],
+        [1061.67099567,  867.03246753]
+    ])
+
+def get_bounds(points):
+    """Calculate the bounds of transformed points"""
+    min_x = np.min(points[:, 0])
+    max_x = np.max(points[:, 0])
+    min_y = np.min(points[:, 1])
+    max_y = np.max(points[:, 1])
+    return min_x, max_x, min_y, max_y
+
+def auto_euclidean_trans(points, img_shape):
+    """Automatically compute translation to center the transformed points"""
+    min_x, max_x, min_y, max_y = get_bounds(points)
+    
+    # Calculate center of transformed points
+    center_x = (max_x + min_x) / 2
+    center_y = (max_y + min_y) / 2
+    
+    # Calculate translation to center of image
+    tx = img_shape[1]/2 - center_x
+    ty = img_shape[0]/2 - center_y
+    
+    return euclidean_trans(np.deg2rad(0), tx, ty)
+
+def plot_lines_and_vanishing_point(img, line1, line2, vanishing_point, 
+                                   title="lines and vanishing point", 
+                                   line1_label="Line 1", 
+                                   line2_label="Line 2"):
+    """
+    Plot two lines and their vanishing point on the image
+    """
+    fig, ax = plt.subplots()
+    ax.imshow(img)
+    x_vals = np.array(ax.get_xlim())
+    # Plot lines
+    y_vals_1 = -(line1[0] * x_vals + line1[2]) / line1[1]
+    y_vals_2 = -(line2[0] * x_vals + line2[2]) / line2[1]
+    ax.plot(x_vals, y_vals_1, '--r', label=line1_label)
+    ax.plot(x_vals, y_vals_2, '--b', label=line2_label)
+    # Plot vanishing point
+    ax.plot(vanishing_point[0], vanishing_point[1], 'ro', label='Vanishing point')
+    ax.legend()
+    plt.title(title)
+    plt.show()
+
+# You can use this function to get points from the image
+def acquire_points(image, n=4):
+    fig, ax = plt.subplots()
+    ax.imshow(image)
+    points = # TODO
+    plt.close(fig)  # Close the figure after getting points
+    return np.array(points)
+
+def main(args): # args come from the script at the end of the file
     """
     Goal : Perform affine rectification then metric rectification on the given image
     """
@@ -140,71 +206,6 @@ def main(args):
     # plt.imshow(eucl_img)
     # plt.show()
 
-def euclidean_trans(theta, tx, ty):
-    return np.array([
-        [np.cos(theta), -np.sin(theta), tx],
-        [np.sin(theta), np.cos(theta), ty],
-        [0, 0, 1]
-    ])
-
-
-def points_that_should_work_if_pointing_does_not_work():
-    return np.array([
-        [ 745.65367965,  646.25324675],
-        [1057.34199134,  464.43506494],
-        [1382.01731602,  641.92424242],
-        [1061.67099567,  867.03246753]
-    ])
-
-def get_bounds(points):
-    """Calculate the bounds of transformed points"""
-    min_x = np.min(points[:, 0])
-    max_x = np.max(points[:, 0])
-    min_y = np.min(points[:, 1])
-    max_y = np.max(points[:, 1])
-    return min_x, max_x, min_y, max_y
-
-def auto_euclidean_trans(points, img_shape):
-    """Automatically compute translation to center the transformed points"""
-    min_x, max_x, min_y, max_y = get_bounds(points)
-    
-    # Calculate center of transformed points
-    center_x = (max_x + min_x) / 2
-    center_y = (max_y + min_y) / 2
-    
-    # Calculate translation to center of image
-    tx = img_shape[1]/2 - center_x
-    ty = img_shape[0]/2 - center_y
-    
-    return euclidean_trans(np.deg2rad(0), tx, ty)
-
-def plot_lines_and_vanishing_point(img, line1, line2, vanishing_point, 
-                                   title="lines and vanishing point", 
-                                   line1_label="Line 1", 
-                                   line2_label="Line 2"):
-    """
-    Plot two lines and their vanishing point on the image
-    """
-    fig, ax = plt.subplots()
-    ax.imshow(img)
-    x_vals = np.array(ax.get_xlim())
-    # Plot lines
-    y_vals_1 = -(line1[0] * x_vals + line1[2]) / line1[1]
-    y_vals_2 = -(line2[0] * x_vals + line2[2]) / line2[1]
-    ax.plot(x_vals, y_vals_1, '--r', label=line1_label)
-    ax.plot(x_vals, y_vals_2, '--b', label=line2_label)
-    # Plot vanishing point
-    ax.plot(vanishing_point[0], vanishing_point[1], 'ro', label='Vanishing point')
-    ax.legend()
-    plt.title(title)
-    plt.show()
-
-def acquire_points(image, n=4):
-    fig, ax = plt.subplots()
-    ax.imshow(image)
-    points = # TODO
-    plt.close(fig)  # Close the figure after getting points
-    return np.array(points)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
