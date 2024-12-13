@@ -2,7 +2,7 @@
 AVG Lab 2 - Part 1 : Epipolar Geometry, Using Fundamental Matrix
 Example use:
 > cd lab2_folder
-> python lab2_part1.py --input_path chapel_F.txt
+> python lab2_part1.py
 
 Submission: Please submit this code completed and commented. You need to comment
 everything you add and explain why you add it.
